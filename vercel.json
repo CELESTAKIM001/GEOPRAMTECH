@@ -10,23 +10,20 @@
       }
     },
     {
-      "src": "src/static/**/*",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "src/staticfiles/**/*",
+      "src": "staticfiles/**/*",
       "use": "@vercel/static"
     }
   ],
   "routes": [
     {
+      "src": "/static/(.*)",
+      "dest": "/staticfiles/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "api/index.py"
     }
   ],
-  "env": {
-    "DEBUG": "False"
-  },
   "build": {
     "env": {
       "DJANGO_SETTINGS_MODULE": "geopram_tech.settings"
