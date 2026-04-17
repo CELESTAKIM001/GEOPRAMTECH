@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - GEOPRAM TECH{% endblock %}
+
+{% block navbar %}{% endblock %}
+
+{% block content %}
+<div class="dashboard-layout">
+    <aside class="dashboard-sidebar">
+        <div class="dashboard-sidebar-logo">
+            <div class="logo-icon"><i class="fas fa-map-marker-alt"></i></div>
+            <span>GEOPRAM</span>
+        </div>
+        <nav class="dashboard-nav">
+            <a href="#" class="active"><span><i class="fas fa-chart-line"></i></span> Overview</a>
+            <a href="#"><span><i class="fas fa-map"></i></span> Projects</a>
+            <a href="#"><span><i class="fas fa-graduation-cap"></i></span> Training</a>
+            <a href="#"><span><i class="fas fa-folder"></i></span> Files</a>
+            <a href="#"><span><i class="fas fa-comments"></i></span> Messages</a>
+            <a href="#"><span><i class="fas fa-cog"></i></span> Settings</a>
+            <a href="{% url 'logout' %}"><span><i class="fas fa-sign-out-alt"></i></span> Logout</a>
+        </nav>
+    </aside>
+    <main class="dashboard-main">
+        <div class="dashboard-header">
+            <h2>Dashboard Overview</h2>
+            <div class="dashboard-user">
+                <div class="dashboard-user-info">
+                    <h5>{{ user.username|title }}</h5>
+                    <span>Administrator</span>
+                </div>
+                <div class="dashboard-user-avatar">
+                    {{ user.username|make_list|first|upper }}
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-stats">
+            <div class="glass-card dashboard-stat-card">
+                <div class="stat-header">
+                    <div>
+                        <div class="stat-number">{{ projects_count }}</div>
+                        <div class="stat-label">Total Projects</div>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-map"></i></div>
+                </div>
+            </div>
+            <div class="glass-card dashboard-stat-card">
+                <div class="stat-header">
+                    <div>
+                        <div class="stat-number">{{ clients_count }}</div>
+                        <div class="stat-label">Active Clients</div>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-building"></i></div>
+                </div>
+            </div>
+            <div class="glass-card dashboard-stat-card">
+                <div class="stat-header">
+                    <div>
+                        <div class="stat-number">{{ training_completed }}</div>
+                        <div class="stat-label">Courses Completed</div>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-graduation-cap"></i></div>
+                </div>
+            </div>
+            <div class="glass-card dashboard-stat-card">
+                <div class="stat-header">
+                    <div>
+                        <div class="stat-number">98%</div>
+                        <div class="stat-label">Satisfaction Rate</div>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-star"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="glass-card dashboard-card">
+                <h4>Recent Projects</h4>
+                <table class="dashboard-table">
+                    <thead>
+                        <tr>
+                            <th>Project Name</th>
+                            <th>Client</th>
+                            <th>Status</th>
+                            <th>Due Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Nairobi Cadastral Mapping</td>
+                            <td>County Gov</td>
+                            <td><span class="status-badge in-progress">In Progress</span></td>
+                            <td>Apr 30, 2024</td>
+                        </tr>
+                        <tr>
+                            <td>Agricultural Survey AI Analysis</td>
+                            <td>Green Farms Ltd</td>
+                            <td><span class="status-badge completed">Completed</span></td>
+                            <td>Mar 15, 2024</td>
+                        </tr>
+                        <tr>
+                            <td>Urban Planning GIS Portal</td>
+                            <td>City Council</td>
+                            <td><span class="status-badge in-progress">In Progress</span></td>
+                            <td>May 20, 2024</td>
+                        </tr>
+                        <tr>
+                            <td>Environmental Impact Assessment</td>
+                            <td>Mining Corp</td>
+                            <td><span class="status-badge pending">Pending</span></td>
+                            <td>Jun 01, 2024</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="glass-card dashboard-card">
+                <h4>Recent Activity</h4>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <div class="activity-icon"><i class="fas fa-folder"></i></div>
+                        <div class="activity-content">
+                            <h5>New project uploaded</h5>
+                            <span>2 hours ago</span>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <div class="activity-content">
+                            <h5>Training enrollment</h5>
+                            <span>5 hours ago</span>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon"><i class="fas fa-comments"></i></div>
+                        <div class="activity-content">
+                            <h5>New message received</h5>
+                            <span>1 day ago</span>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon"><i class="fas fa-check-circle"></i></div>
+                        <div class="activity-content">
+                            <h5>Project completed</h5>
+                            <span>2 days ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card dashboard-card" style="margin-top: 24px;">
+            <h4>Training Progress</h4>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+                <div style="padding: 16px; background: var(--bg-elevated); border-radius: 12px; text-align: center;">
+                    <div style="font-size: 24px; margin-bottom: 8px;"><i class="fab fa-python"></i></div>
+                    <h5 style="font-size: 14px; margin-bottom: 4px;">Django Development</h5>
+                    <span style="font-size: 12px; color: var(--success);">75% Complete</span>
+                </div>
+                <div style="padding: 16px; background: var(--bg-elevated); border-radius: 12px; text-align: center;">
+                    <div style="font-size: 24px; margin-bottom: 8px;"><i class="fas fa-map"></i></div>
+                    <h5 style="font-size: 14px; margin-bottom: 4px;">QGIS Advanced</h5>
+                    <span style="font-size: 12px; color: var(--success);">100% Complete</span>
+                </div>
+                <div style="padding: 16px; background: var(--bg-elevated); border-radius: 12px; text-align: center;">
+                    <div style="font-size: 24px; margin-bottom: 8px;"><i class="fas fa-robot"></i></div>
+                    <h5 style="font-size: 14px; margin-bottom: 4px;">Geospatial AI</h5>
+                    <span style="font-size: 12px; color: var(--warning);">45% Complete</span>
+                </div>
+                <div style="padding: 16px; background: var(--bg-elevated); border-radius: 12px; text-align: center;">
+                    <div style="font-size: 24px; margin-bottom: 8px;"><i class="fas fa-satellite-dish"></i></div>
+                    <h5 style="font-size: 14px; margin-bottom: 4px;">Remote Sensing</h5>
+                    <span style="font-size: 12px; color: var(--text-secondary);">Not Started</span>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}
+
+{% block footer %}{% endblock %}

@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Page Sections - GEOPRAM TECH{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <div class="container">
+        <div class="page-hero-content">
+            <h1>Manage Page Sections</h1>
+            <p>Enable, disable, edit or add new sections to your website pages</p>
+        </div>
+    </div>
+</section>
+
+<section class="page-content">
+    <div class="container">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        
+        <div class="glass-card" style="padding: 32px; margin-bottom: 32px;">
+            <h3 style="margin-bottom: 24px;">Add New Section</h3>
+            <form method="POST" action="{% url 'create_section' %}" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="page">Select Page Section</label>
+                    <select name="page" id="page" required>
+                        <option value="">-- Select Section --</option>
+                        <option value="home_hero">Home - Hero Section</option>
+                        <option value="home_services">Home - Services Section</option>
+                        <option value="home_stats">Home - Stats Section</option>
+                        <option value="home_software">Home - Software Section</option>
+                        <option value="home_testimonials">Home - Testimonials Section</option>
+                        <option value="home_cta">Home - CTA Section</option>
+                        <option value="footer">Footer</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="title">Section Title</label>
+                    <input type="text" name="title" id="title" placeholder="Enter section title">
+                </div>
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label for="content">Section Content (HTML allowed)</label>
+                    <textarea name="content" id="content" rows="4" placeholder="Enter section content"></textarea>
+                </div>
+                <div style="grid-column: 1 / -1;">
+                    <button type="submit" class="btn btn-primary">Create / Update Section</button>
+                </div>
+            </form>
+        </div>
+        
+        <h3 style="margin-bottom: 24px;">Existing Sections</h3>
+        <div class="sections-grid">
+            {% for section in sections %}
+            <div class="glass-card" style="padding: 24px;">
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;">
+                    <h4>{{ section.get_page_display }}</h4>
+                    {% if section.is_active %}
+                    <span style="background: #3FB950; color: #0D1117; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">Active</span>
+                    {% else %}
+                    <span style="background: #8B949E; color: #0D1117; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">Disabled</span>
+                    {% endif %}
+                </div>
+                <p style="color: #8B949E; margin-bottom: 16px;">{{ section.title }}</p>
+                <form method="POST" action="{% url 'manage_sections' %}" style="margin-top: 16px;">
+                    {% csrf_token %}
+                    <input type="hidden" name="section_id" value="{{ section.id }}">
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" name="title" value="{{ section.title|default:'' }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Content</label>
+                        <textarea name="content" rows="3">{{ section.content|default:'' }}</textarea>
+                    </div>
+                    <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 16px;">
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="checkbox" name="is_active" {% if section.is_active %}checked{% endif %}>
+                            <span>Show on website</span>
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-secondary">Update Section</button>
+                </form>
+            </div>
+            {% empty %}
+            <p style="color: #8B949E; grid-column: 1 / -1;">No sections created yet. Add your first section above.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<style>
+.sections-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 24px;
+}
+.form-group {
+    margin-bottom: 16px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #E6EDF3;
+    font-weight: 500;
+}
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 2px solid #161B22;
+    background: #161B22;
+    color: #E6EDF3;
+    font-size: 16px;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #00D4AA;
+}
+</style>
+{% endblock %}

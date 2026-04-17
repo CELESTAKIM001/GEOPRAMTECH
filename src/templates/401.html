@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}401 - Unauthorized | GEOPRAM TECH{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>G</text></svg>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            background: #0D1117; 
+            color: #E6EDF3; 
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .error-container {
+            text-align: center;
+            padding: 40px;
+            max-width: 600px;
+        }
+        .error-code {
+            font-size: 120px;
+            font-weight: bold;
+            color: #00D4AA;
+            line-height: 1;
+            margin-bottom: 20px;
+            text-shadow: 0 0 40px rgba(0, 212, 170, 0.3);
+        }
+        .error-title {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+        .error-message {
+            font-size: 18px;
+            color: #8B949E;
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+        .error-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 14px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: #00D4AA;
+            color: #0D1117;
+        }
+        .btn-primary:hover {
+            background: #00b894;
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid #00D4AA;
+            color: #00D4AA;
+        }
+        .btn-secondary:hover {
+            background: rgba(0, 212, 170, 0.1);
+        }
+        @media (max-width: 768px) {
+            .error-code { font-size: 80px; }
+            .error-title { font-size: 24px; }
+            .error-message { font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-code">401</div>
+        <h1 class="error-title">Unauthorized</h1>
+        <p class="error-message">Please login to access this page. If you don't have an account, register first.</p>
+        <div class="error-actions">
+            <a href="{% url 'login' %}" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="{% url 'register' %}" class="btn btn-secondary"><i class="fas fa-user-plus"></i> Register</a>
+        </div>
+    </div>
+</body>
+</html>

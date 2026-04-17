@@ -1,0 +1,359 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Checkout Section - GEOPRAM Admin{% endblock %}
+
+{% block extra_css %}
+<style>
+.admin-layout { display: flex; min-height: 100vh; }
+
+.admin-sidebar {
+    width: 280px;
+    background: var(--bg-surface);
+    border-right: 1px solid var(--glass-border);
+    padding: 24px 16px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    overflow-y: auto;
+    z-index: 100;
+}
+
+.admin-sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 12px 24px;
+    border-bottom: 1px solid var(--glass-border);
+    margin-bottom: 24px;
+}
+
+.admin-sidebar-logo img {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    object-fit: contain;
+    background: white;
+    padding: 2px;
+}
+
+.admin-sidebar-logo span {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--secondary);
+}
+
+.admin-nav { display: flex; flex-direction: column; gap: 4px; }
+
+.admin-nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-weight: 500;
+    transition: var(--transition-base);
+}
+
+.admin-nav a:hover,
+.admin-nav a.active {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+}
+
+.admin-nav a.active {
+    background: rgba(0, 212, 170, 0.15);
+    color: var(--secondary);
+}
+
+.admin-main {
+    flex: 1;
+    margin-left: 280px;
+    padding: 24px 32px;
+    background: var(--bg-base);
+    min-height: 100vh;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.admin-header h2 { font-size: 28px; color: var(--secondary); }
+
+.checkout-form {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 32px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group.full-width {
+    grid-column: span 2;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--bg-surface);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 14px;
+    transition: var(--transition-base);
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
+}
+
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.btn-primary {
+    background: var(--secondary);
+    color: var(--primary);
+    padding: 12px 24px;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-base);
+}
+
+.btn-primary:hover {
+    background: #00c49a;
+    transform: translateY(-2px);
+}
+
+.admin-table {
+    width: 100%;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 16px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.admin-table th {
+    background: var(--bg-surface);
+    font-size: 12px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.admin-table td {
+    font-size: 14px;
+}
+
+.admin-table tr:last-child td {
+    border-bottom: none;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-badge.pending { background: rgba(210, 153, 34, 0.15); color: #d29922; }
+.status-badge.initiated { background: rgba(0, 212, 170, 0.15); color: var(--secondary); }
+.status-badge.completed { background: rgba(63, 185, 80, 0.15); color: #3fb550; }
+.status-badge.failed { background: rgba(248, 81, 73, 0.15); color: #f85149; }
+
+.action-btns { display: flex; gap: 8px; }
+
+.btn-tiny {
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    border: none;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-send {
+    background: rgba(0, 212, 170, 0.15);
+    color: var(--secondary);
+}
+
+.btn-complete {
+    background: rgba(63, 185, 80, 0.15);
+    color: #3fb550;
+}
+
+.btn-fail {
+    background: rgba(248, 81, 73, 0.15);
+    color: #f85149;
+}
+
+.empty-state {
+    padding: 48px;
+    text-align: center;
+    background: var(--glass-bg);
+    border: 1px dashed var(--glass-border);
+    border-radius: var(--radius-lg);
+}
+
+.empty-state h4 { color: var(--text-secondary); margin-bottom: 8px; }
+
+@media (max-width: 768px) {
+    .admin-sidebar { display: none; }
+    .admin-main { margin-left: 0; }
+    .form-grid { grid-template-columns: 1fr; }
+    .form-group.full-width { grid-column: span 1; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="admin-layout">
+    <aside class="admin-sidebar">
+        <div class="admin-sidebar-logo">
+            <img src="{% static 'logo.png' %}" alt="GEOPRAM">
+            <span>MAJOR ADMIN</span>
+        </div>
+        <nav class="admin-nav">
+            <a href="{% url 'major_admin_dashboard' %}"><span><i class="fas fa-chart-line"></i></span> Overview</a>
+            <a href="{% url 'checkout_section' %}" class="active"><span><i class="fas fa-cash-register"></i></span> Checkout</a>
+            <a href="{% url 'manage_sections' %}"><span><i class="fas fa-puzzle-piece"></i></span> Page Sections</a>
+            <a href="{% url 'home' %}"><span><i class="fas fa-globe"></i></span> View Site</a>
+            <a href="{% url 'logout' %}"><span><i class="fas fa-sign-out-alt"></i></span> Logout</a>
+        </nav>
+    </aside>
+
+    <main class="admin-main">
+        <header class="admin-header">
+            <div>
+                <h2>Checkout Payment Section</h2>
+                <p style="color: var(--text-secondary); margin-top: 8px;">Create payment requests and track MPESA transactions</p>
+            </div>
+        </header>
+
+        <div class="checkout-form">
+            <h3 style="margin-bottom: 20px; color: var(--secondary);">Create New Checkout</h3>
+            <form method="POST" action="{% url 'create_checkout' %}">
+                {% csrf_token %}
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Customer Name</label>
+                        <input type="text" name="customer_name" placeholder="Enter customer name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>MPESA Phone Number</label>
+                        <input type="tel" name="customer_phone" placeholder="2547XXXXXXXX" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Service Name</label>
+                        <input type="text" name="service_name" placeholder="e.g., Web Development, GIS Mapping" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Amount (KES)</label>
+                        <input type="number" name="amount" placeholder="0.00" step="0.01" required>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Service Description</label>
+                        <textarea name="service_description" placeholder="Describe the service or product..."></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">Create Checkout</button>
+            </form>
+        </div>
+
+        <h3 style="margin-bottom: 20px; color: var(--secondary);">Transaction History</h3>
+        {% if transactions %}
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Customer</th>
+                    <th>Phone</th>
+                    <th>Service</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Receipt</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tx in transactions %}
+                <tr>
+                    <td><strong>{{ tx.customer_name }}</strong></td>
+                    <td>{{ tx.customer_phone }}</td>
+                    <td>{{ tx.service_name }}</td>
+                    <td>KES {{ tx.amount }}</td>
+                    <td><span class="status-badge {{ tx.status }}">{{ tx.get_status_display }}</span></td>
+                    <td>{{ tx.mpesa_receipt|default:"—" }}</td>
+                    <td>{{ tx.created_at|date:"M d, H:i" }}</td>
+                    <td>
+                        <div class="action-btns">
+                            {% if tx.status == "pending" %}
+                            <a href="{% url 'send_mpesa_prompt' tx.id %}" class="btn-tiny btn-send">Send Prompt</a>
+                            {% elif tx.status == "initiated" %}
+                            <form method="POST" action="{% url 'complete_transaction' tx.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <input type="text" name="mpesa_receipt" placeholder="Receipt No." style="width:100px;padding:4px 8px;font-size:11px;">
+                                <button type="submit" class="btn-tiny btn-complete">Complete</button>
+                            </form>
+                            {% elif tx.status == "completed" %}
+                            <span class="status-badge completed">Paid</span>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+            <h4>No transactions yet</h4>
+            <p>Create the first checkout above</p>
+        </div>
+        {% endif %}
+    </main>
+</div>
+{% endblock %}

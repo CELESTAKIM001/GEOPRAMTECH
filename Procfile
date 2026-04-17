@@ -1,0 +1,1 @@
+web: gunicorn src.geopram_tech.wsgi --env DEBUG=True

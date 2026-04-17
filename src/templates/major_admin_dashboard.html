@@ -1,0 +1,620 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Major Admin Dashboard - GEOPRAM{% endblock %}
+
+{% block extra_css %}
+<style>
+.admin-layout { display: flex; min-height: 100vh; }
+
+.admin-sidebar {
+    width: 280px;
+    background: var(--bg-surface);
+    border-right: 1px solid var(--glass-border);
+    padding: 24px 16px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    overflow-y: auto;
+    z-index: 100;
+}
+
+.admin-sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 12px 24px;
+    border-bottom: 1px solid var(--glass-border);
+    margin-bottom: 24px;
+}
+
+.admin-sidebar-logo img {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    object-fit: contain;
+    background: white;
+    padding: 2px;
+}
+
+.admin-sidebar-logo span {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--secondary);
+}
+
+.admin-nav { display: flex; flex-direction: column; gap: 4px; }
+
+.admin-nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-weight: 500;
+    transition: var(--transition-base);
+}
+
+.admin-nav a:hover,
+.admin-nav a.active {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+}
+
+.admin-nav a.active {
+    background: rgba(0, 212, 170, 0.15);
+    color: var(--secondary);
+}
+
+.admin-nav a span { font-size: 18px; }
+
+.admin-main {
+    flex: 1;
+    margin-left: 280px;
+    padding: 24px 32px;
+    background: var(--bg-base);
+    min-height: 100vh;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.admin-header h2 { font-size: 28px; color: var(--secondary); }
+
+.admin-badge {
+    display: inline-flex;
+    padding: 8px 16px;
+    background: rgba(0, 212, 170, 0.15);
+    border-radius: 100px;
+    font-size: 14px;
+    color: var(--secondary);
+    font-weight: 600;
+}
+
+.admin-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.admin-stat-card {
+    padding: 24px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    text-align: center;
+}
+
+.admin-stat-card .stat-number {
+    font-family: 'Outfit', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--secondary);
+}
+
+.admin-stat-card .stat-label {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 8px;
+}
+
+.admin-section {
+    margin-bottom: 40px;
+}
+
+.admin-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.admin-section h3 { font-size: 20px; }
+
+.admin-table {
+    width: 100%;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 16px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.admin-table th {
+    background: var(--bg-surface);
+    font-size: 12px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.admin-table td {
+    font-size: 14px;
+}
+
+.admin-table tr:last-child td {
+    border-bottom: none;
+}
+
+.admin-table tr:hover td {
+    background: var(--bg-elevated);
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-badge.pending {
+    background: rgba(210, 153, 34, 0.15);
+    color: var(--warning);
+}
+
+.status-badge.approved, .status-badge.login {
+    background: rgba(63, 185, 80, 0.15);
+    color: var(--success);
+}
+
+.status-badge.rejected, .status-badge.logout {
+    background: rgba(248, 81, 73, 0.15);
+    color: var(--error);
+}
+
+.action-btns {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-tiny {
+    padding: 6px 14px;
+    font-size: 12px;
+}
+
+.profile-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.profile-avatar {
+    width: 36px;
+    height: 36px;
+    background: var(--gradient-accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 14px;
+}
+
+.profile-name { font-weight: 500; }
+.profile-email { font-size: 12px; color: var(--text-secondary); }
+
+.empty-state {
+    padding: 48px;
+    text-align: center;
+    background: var(--glass-bg);
+    border: 1px dashed var(--glass-border);
+    border-radius: var(--radius-lg);
+}
+
+.empty-state h4 { color: var(--text-secondary); margin-bottom: 8px; }
+
+.activity-timeline {
+    position: relative;
+    padding-left: 20px;
+}
+
+.activity-item {
+    position: relative;
+    padding: 12px 16px;
+    border-left: 2px solid var(--glass-border);
+    margin-left: 8px;
+}
+
+.activity-item::before {
+    content: '';
+    position: absolute;
+    left: -6px;
+    top: 18px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--secondary);
+}
+
+.activity-time {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.referrer-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(0, 212, 170, 0.1);
+    border: 1px solid var(--secondary);
+    border-radius: var(--radius-md);
+    margin-bottom: 12px;
+}
+
+.referrer-badge .rank {
+    background: var(--secondary);
+    color: var(--primary);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+@media (max-width: 1024px) {
+    .admin-stats { grid-template-columns: repeat(2, 1fr); }
+    .stats-row { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+    .admin-sidebar { display: none; }
+    .admin-main { margin-left: 0; }
+    .admin-stats { grid-template-columns: 1fr; }
+    .action-btns { flex-direction: column; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="admin-layout">
+    <aside class="admin-sidebar">
+        <div class="admin-sidebar-logo">
+            <img src="{% static 'logo.png' %}" alt="GEOPRAM" style="width:40px;height:40px;border-radius:12px;object-fit:contain;background:white;box-shadow:0 0 15px rgba(255,215,0,0.4);">
+            <span>MAJOR ADMIN</span>
+        </div>
+        <nav class="admin-nav">
+            <a href="{% url 'major_admin_dashboard' %}" class="active"><span><i class="fas fa-chart-line"></i></span> Overview</a>
+            <a href="#logins"><span><i class="fas fa-sign-in-alt"></i></span> User Logins</a>
+            <a href="#activities"><span><i class="fas fa-activity"></i></span> Activities</a>
+            <a href="#referrals"><span><i class="fas fa-share-alt"></i></span> Referrals</a>
+            <a href="#profiles"><span><i class="fas fa-users"></i></span> Profiles</a>
+            <a href="#verification"><span><i class="fas fa-check-circle"></i></span> Verifications</a>
+            <a href="{% url 'manage_sections' %}"><span><i class="fas fa-puzzle-piece"></i></span> Page Sections</a>
+            <a href="{% url 'checkout_section' %}"><span><i class="fas fa-cash-register"></i></span> Checkout</a>
+            <a href="#stk-push"><span><i class="fas fa-mobile-alt"></i></span> STK Push</a>
+            <a href="{% url 'home' %}"><span><i class="fas fa-globe"></i></span> View Site</a>
+            <a href="{% url 'logout' %}"><span><i class="fas fa-sign-out-alt"></i></span> Logout</a>
+        </nav>
+    </aside>
+
+    <main class="admin-main">
+        <header class="admin-header">
+            <div>
+                <h2>Major Admin Dashboard</h2>
+                <span class="admin-badge">Full Control Panel</span>
+            </div>
+        </header>
+
+        <div class="admin-stats">
+            <div class="admin-stat-card">
+                <div class="stat-number">{{ total_visits }}</div>
+                <div class="stat-label">Total Website Visits</div>
+            </div>
+            <div class="admin-stat-card">
+                <div class="stat-number">{{ all_profiles.count }}</div>
+                <div class="stat-label">Total Users</div>
+            </div>
+            <div class="admin-stat-card">
+                <div class="stat-number">{{ pending_verifications.count }}</div>
+                <div class="stat-label">Pending Verifications</div>
+            </div>
+            <div class="admin-stat-card">
+                <div class="stat-number">{{ best_referrers|length }}</div>
+                <div class="stat-label">Top Referrers</div>
+            </div>
+        </div>
+
+        <div class="stats-row">
+            <div class="admin-section" id="logins">
+                <div class="admin-section-header">
+                    <h3><i class="fas fa-sign-in-alt"></i> Recent User Logins</h3>
+                </div>
+                {% if login_activities %}
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Activity</th>
+                            <th>IP Address</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for activity in login_activities %}
+                        <tr>
+                            <td>
+                                <div class="profile-row">
+                                    <div class="profile-avatar">{{ activity.user.username|first|upper }}</div>
+                                    <div>
+                                        <div class="profile-name">{{ activity.user.username }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="status-badge {{ activity.activity_type }}">{{ activity.get_activity_type_display }}</span></td>
+                            <td>{{ activity.ip_address|default:"—" }}</td>
+                            <td>{{ activity.created_at|date:"M d, Y H:i" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="empty-state">
+                    <h4>No login activity</h4>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="admin-section" id="referrals">
+                <div class="admin-section-header">
+                    <h3><i class="fas fa-share-alt"></i> Top Referrers</h3>
+                </div>
+                {% if best_referrers %}
+                {% for referrer in best_referrers %}
+                <div class="referrer-badge">
+                    <span class="rank">{{ forloop.counter }}</span>
+                    <div>
+                        <div class="profile-name">{{ referrer.user.username }}</div>
+                        <div class="profile-email">{{ referrer.referrals.count }} referrals | {{ referrer.points }} points</div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <h4>No referrals yet</h4>
+                </div>
+                {% endif %}
+                
+                <h4 style="margin-top: 24px; margin-bottom: 12px;">Referral Details</h4>
+                {% for referrer in best_referrers %}
+                    {% if referrer.referrals.all %}
+                    <div style="margin-bottom: 16px;">
+                        <strong>{{ referrer.user.username }}</strong> referred:
+                        {% for referred in referrer.referrals.all %}
+                        <span style="color: var(--text-secondary);">{{ referred.user.username }}{% if not forloop.last %}, {% endif %}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="admin-section" id="activities">
+            <div class="admin-section-header">
+                <h3><i class="fas fa-list"></i> All User Activities</h3>
+            </div>
+            {% if all_activities %}
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Activity</th>
+                        <th>Description</th>
+                        <th>IP Address</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for activity in all_activities %}
+                    <tr>
+                        <td>
+                            <div class="profile-row">
+                                <div class="profile-avatar">{{ activity.user.username|first|upper }}</div>
+                                <div class="profile-name">{{ activity.user.username }}</div>
+                            </div>
+                        </td>
+                        <td><span class="status-badge {% if activity.activity_type == 'login' %}approved{% elif activity.activity_type == 'logout' %}rejected{% else %}pending{% endif %}">{{ activity.get_activity_type_display }}</span></td>
+                        <td>{{ activity.description|default:"—" }}</td>
+                        <td>{{ activity.ip_address|default:"—" }}</td>
+                        <td>{{ activity.created_at|date:"M d, Y H:i:s" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty-state">
+                <h4>No activities recorded</h4>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="admin-section" id="verification">
+            <div class="admin-section-header">
+                <h3>Pending Verifications</h3>
+            </div>
+            {% if pending_verifications %}
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Type</th>
+                        <th>Item</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for v in pending_verifications %}
+                    <tr>
+                        <td>
+                            <div class="profile-row">
+                                <div class="profile-avatar">{{ v.user_profile.user.username|first|upper }}</div>
+                                <div>
+                                    <div class="profile-name">{{ v.user_profile.user.username }}</div>
+                                    <div class="profile-email">{{ v.user_profile.user.email }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="status-badge pending">{{ v.item_type }}</span></td>
+                        <td>{{ v.item_title }}</td>
+                        <td>{{ v.requested_at|date:"M d, Y" }}</td>
+                        <td>
+                            <div class="action-btns">
+                                <a href="{% url 'admin_review_verification' v.id %}" class="btn btn-primary btn-tiny">Review</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty-state">
+                <h4>No pending verifications</h4>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="admin-section" id="profiles">
+            <div class="admin-section-header">
+                <h3>All User Profiles</h3>
+            </div>
+            {% if all_profiles %}
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Referred By</th>
+                        <th>Points</th>
+                        <th>Status</th>
+                        <th>Last Active</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for profile in all_profiles %}
+                    <tr>
+                        <td>
+                            <div class="profile-row">
+                                <div class="profile-avatar">{{ profile.user.username|first|upper }}</div>
+                                <div>
+                                    <div class="profile-name">{{ profile.user.username }}</div>
+                                    <div class="profile-email">{{ profile.user.email }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ profile.referred_by.user.username|default:"—" }}</td>
+                        <td>{{ profile.points }}</td>
+                        <td>
+                            <span class="status-badge {% if profile.is_public %}approved{% else %}pending{% endif %}">
+                                {% if profile.is_public %}Public{% else %}Private{% endif %}
+                            </span>
+                        </td>
+                        <td>{{ profile.last_active|date:"M d, Y H:i" }}</td>
+                        <td>
+                            <div class="action-btns">
+                                <a href="{% url 'admin_edit_profile' profile.id %}" class="btn btn-secondary btn-tiny">Edit</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty-state">
+                <h4>No profiles yet</h4>
+            </div>
+{% endif %}
+         </div>
+
+         <div class="admin-section" id="stk-push">
+             <div class="admin-section-header">
+                 <h3><i class="fas fa-mobile-alt"></i> STK Push Transactions</h3>
+             </div>
+             {% if stk_transactions %}
+             <table class="admin-table">
+                 <thead>
+                     <tr>
+                         <th>Customer</th>
+                         <th>Phone</th>
+                         <th>Service</th>
+                         <th>Amount</th>
+                         <th>Status</th>
+                         <th>Receipt</th>
+                         <th>Date</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     {% for tx in stk_transactions %}
+                     <tr>
+                         <td>
+                             <div class="profile-row">
+                                 <div class="profile-avatar">{{ tx.customer_name|first|upper }}</div>
+                                 <div class="profile-name">{{ tx.customer_name }}</div>
+                             </div>
+                         </td>
+                         <td>{{ tx.customer_phone }}</td>
+                         <td>{{ tx.service_name }}</td>
+                         <td>KSh {{ tx.amount }}</td>
+                         <td><span class="status-badge {% if tx.status == 'completed' %}approved{% elif tx.status == 'failed' %}rejected{% else %}pending{% endif %}">{{ tx.get_status_display }}</span></td>
+                         <td>{{ tx.mpesa_receipt|default:"—" }}</td>
+                         <td>{{ tx.created_at|date:"M d, Y H:i" }}</td>
+                     </tr>
+                     {% endfor %}
+                 </tbody>
+             </table>
+             {% else %}
+             <div class="empty-state">
+                 <h4>No STK transactions yet</h4>
+             </div>
+             {% endif %}
+         </div>
+     </main>
+</div>
+{% endblock %}

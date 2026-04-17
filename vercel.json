@@ -1,0 +1,35 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.py",
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "15mb",
+        "timeout": 30
+      }
+    },
+    {
+      "src": "src/static/**/*",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "src/staticfiles/**/*",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "api/index.py"
+    }
+  ],
+  "env": {
+    "DEBUG": "False"
+  },
+  "build": {
+    "env": {
+      "DJANGO_SETTINGS_MODULE": "geopram_tech.settings"
+    }
+  }
+}

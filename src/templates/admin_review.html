@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Review Verification - GEOPRAM{% endblock %}
+
+{% block content %}
+<div class="login-page">
+    <div class="login-container">
+        <div class="login-card glass-card">
+            <div class="login-header">
+                <div class="logo-icon"><i class="fas fa-check-circle"></i></div>
+                <h2>Review Verification</h2>
+                <p>{{ verification.item_title }}</p>
+            </div>
+
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li class="{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            <div style="padding: 16px; background: var(--bg-elevated); border-radius: 12px; margin-bottom: 24px;">
+                <p style="font-size: 14px; color: var(--text-secondary);">Type: <strong>{{ verification.item_type }}</strong></p>
+                <p style="font-size: 14px; color: var(--text-secondary);">Requested by: <strong>{{ verification.user_profile.user.username }}</strong></p>
+                <p style="font-size: 14px; color: var(--text-secondary);">Date: <strong>{{ verification.requested_at|date:"M d, Y" }}</strong></p>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Admin Notes (optional)</label>
+                    <textarea name="admin_notes" rows="3" placeholder="Notes about this verification..."></textarea>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <button type="submit" name="action" value="approve" class="btn btn-primary" style="flex: 1; background: var(--success);">Approve</button>
+                    <button type="submit" name="action" value="reject" class="btn btn-secondary" style="flex: 1;">Reject</button>
+                </div>
+            </form>
+
+            <a href="{% url 'admin_dashboard' %}" style="display: block; text-align: center; margin-top: 16px; font-size: 14px; color: var(--text-secondary);">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

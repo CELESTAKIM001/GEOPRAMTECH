@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Add Item - GEOPRAM{% endblock %}
+
+{% block content %}
+<div class="login-page">
+    <div class="login-container">
+        <div class="login-card glass-card">
+            <div class="login-header">
+                <div class="logo-icon"><i class="fas fa-folder"></i></div>
+                <h2>Add New Item</h2>
+                <p>Add project, portfolio, or certification</p>
+            </div>
+
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li class="{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" name="title" placeholder="e.g., Portfolio Project, Certification" required>
+                </div>
+                <div class="form-group">
+                    <label>Type</label>
+                    <select name="item_type">
+                        <option value="project">Project</option>
+                        <option value="portfolio">Portfolio Item</option>
+                        <option value="certification">Certification</option>
+                        <option value="service">Service</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="description" rows="3" placeholder="Describe your item..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Link (optional)</label>
+                    <input type="url" name="link" placeholder="https://...">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Add Item</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

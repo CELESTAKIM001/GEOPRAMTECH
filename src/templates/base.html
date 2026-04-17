@@ -1,0 +1,224 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}GEOPRAM TECH{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>G</text></svg>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+    function toggleTheme() {
+        const html = document.documentElement;
+        if (html.getAttribute('data-theme') === 'dark') {
+            html.setAttribute('data-theme', 'light');
+            localStorage.setItem('theme', 'light');
+        } else {
+            html.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+        }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    });
+    document.addEventListener('contextmenu', function(e) {
+        {% if not user.is_staff %}
+        e.preventDefault();
+        {% endif %}
+    });
+    document.addEventListener('keydown', function(e) {
+        {% if not user.is_staff %}
+        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'u') || (e.ctrlKey && e.key === 'c') || (e.ctrlKey && e.key === 'p')) {
+            e.preventDefault();
+        }
+        {% endif %}
+    });
+    document.addEventListener('copy', function(e) {
+        {% if not user.is_staff %}
+        e.preventDefault();
+        alert('Copying disabled');
+        {% endif %}
+    });
+    document.addEventListener('cut', function(e) {
+        {% if not user.is_staff %}
+        e.preventDefault();
+        {% endif %}
+    });
+    document.addEventListener('selectstart', function(e) {
+        {% if not user.is_staff %}
+        e.preventDefault();
+        {% endif %}
+    });
+    document.addEventListener('dragstart', function(e) {
+        {% if not user.is_staff %}
+        e.preventDefault();
+        {% endif %}
+    });
+    </script>
+    <style>
+    {% if not user.is_staff %}
+    body {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    {% endif %}
+    img {
+        -webkit-user-drag: none;
+        draggable: false;
+        pointer-events: none;
+    }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body oncontextmenu="{% if user.is_staff %}return true{% else %}return false{% endif %}" onselectstart="return {% if user.is_staff %}true{% else %}false{% endif %}" ondragstart="return {% if user.is_staff %}true{% else %}false{% endif %}" oncopy="return {% if user.is_staff %}true{% else %}false{% endif %}">
+    <div class="ckg-badge" title="Secured by CKG">CKG</div>
+    {% block navbar %}
+    <nav class="navbar">
+        <div class="container">
+            <a href="{% url 'home' %}" class="logo">
+                <img src="{% static 'logo.png' %}" alt="GEOPRAM" style="width:50px;height:50px;border-radius:12px;object-fit:contain;background:white;box-shadow:0 0 20px rgba(0,212,170,0.3);">
+                <div class="logo-text">GEOPRAM<span>TECH</span></div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="{% url 'services' %}" class="{% if '/services/' in request.path %}active{% endif %}">Services</a></li>
+                <li><a href="{% url 'software' %}" class="{% if '/software/' in request.path %}active{% endif %}">Software</a></li>
+                <li><a href="{% url 'solutions' %}" class="{% if '/solutions/' in request.path %}active{% endif %}">Solutions</a></li>
+                <li><a href="{% url 'training' %}" class="{% if '/training/' in request.path %}active{% endif %}">Training</a></li>
+                <li><a href="{% url 'public_directory' %}" class="{% if '/directory/' in request.path %}active{% endif %}">Directory</a></li>
+                <li><a href="{% url 'terms' %}" class="{% if '/terms/' in request.path %}active{% endif %}">Terms</a></li>
+            </ul>
+            <div class="navbar-actions">
+                <button onclick="toggleTheme()" class="btn btn-ghost" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+                <a href="{% url 'login' %}" class="btn btn-ghost">Login</a>
+                <a href="{% url 'register' %}" class="btn btn-secondary">Register</a>
+                <a href="{% url 'dashboard' %}" class="btn btn-primary">Dashboard</a>
+            </div>
+            <div class="mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+    {% endblock %}
+
+    {% block content %}{% endblock %}
+
+    {% block footer %}
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="{% url 'home' %}" class="logo">
+                        <img src="{% static 'logo.png' %}" alt="GEOPRAM" style="width:50px;height:50px;border-radius:12px;object-fit:contain;background:white;box-shadow:0 0 20px rgba(255,215,0,0.4);">
+                        <div class="logo-text">GEOPRAM<span>TECH</span></div>
+                    </a>
+                    <p>Leading provider of GIS services, remote sensing, AI analysis, and professional training solutions in Kenya and beyond.</p>
+                    <div class="footer-social">
+                        <a href="https://www.linkedin.com/in/geopram-tech-695070404/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://x.com/GeopramTech" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.instagram.com/geopramtech/" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.youtube.com/@GeoPramTech" target="_blank"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Services</h4>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'services' %}">GIS Mapping</a></li>
+                        <li><a href="{% url 'services' %}">Remote Sensing</a></li>
+                        <li><a href="{% url 'services' %}">AI Analysis</a></li>
+                        <li><a href="{% url 'services' %}">Web Development</a></li>
+                        <li><a href="{% url 'services' %}">Design Services</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Software</h4>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'software' %}">Survey RTK</a></li>
+                        <li><a href="{% url 'software' %}">AutoCAD</a></li>
+                        <li><a href="{% url 'software' %}">QGIS</a></li>
+                        <li><a href="{% url 'software' %}">ArcGIS</a></li>
+                        <li><a href="{% url 'software' %}">GIS Apps</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Training</h4>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'training' %}">Django Development</a></li>
+                        <li><a href="{% url 'training' %}">GIS Certification</a></li>
+                        <li><a href="{% url 'training' %}">Computer Skills</a></li>
+                        <li><a href="{% url 'training' %}">Remote Sensing</a></li>
+                        <li><a href="{% url 'terms' %}">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 GEOPRAM TECH. All rights reserved | Transforming Spatial Data into Solutions</p>
+                <p class="footer-powered">Secured by CKG</p>
+                <p style="margin-top: 8px; font-size: 11px; opacity: 0.7;"><!-- Major Admin: <a href="{% url 'major_admin_dashboard' %}" style="color: var(--primary);">Dashboard</a> --></p>
+            </div>
+        </div>
+    </footer>
+    {% endblock %}
+
+    {% block extra_js %}{% endblock %}
+    
+    {% if user.is_staff %}
+    <div id="whatsapp-chat" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
+        <div id="chat-toggle" onclick="toggleChat()" style="width: 60px; height: 60px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);">
+            <i class="fab fa-whatsapp" style="font-size: 30px; color: white;"></i>
+        </div>
+        <div id="chat-window" style="display: none; position: absolute; bottom: 70px; right: 0; width: 350px; background: white; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.2); overflow: hidden;">
+            <div style="background: #25D366; padding: 15px; display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 40px; height: 40px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-headset" style="color: #25D366; font-size: 20px;"></i>
+                    </div>
+                    <div>
+                        <h4 style="margin: 0; color: white; font-size: 16px;">GEOPRAM Support</h4>
+                        <p style="margin: 0; color: rgba(255,255,255,0.8); font-size: 12px;">Online now</p>
+                    </div>
+                </div>
+                <i class="fas fa-times" onclick="toggleChat()" style="color: white; cursor: pointer; font-size: 20px;"></i>
+            </div>
+            <div style="padding: 15px; max-height: 300px; overflow-y: auto;">
+                <div style="background: #f0f0f0; padding: 10px 15px; border-radius: 15px 15px 15px 0; margin-bottom: 10px; max-width: 80%;">
+                    <p style="margin: 0; color: #333; font-size: 14px;">Hello! Need help? Contact us via:</p>
+                </div>
+                <a href="mailto:geopramtech@gmail.com" style="display: flex; align-items: center; gap: 10px; padding: 12px; background: #25D366; color: white; border-radius: 10px; text-decoration: none; margin-bottom: 8px;">
+                    <i class="fas fa-envelope"></i>
+                    <span>geopramtech@gmail.com</span>
+                </a>
+                <a href="https://chat.whatsapp.com/COBcDnmXfIjBztyc9YBhSZ" target="_blank" style="display: flex; align-items: center; gap: 10px; padding: 12px; background: #25D366; color: white; border-radius: 10px; text-decoration: none; margin-bottom: 8px;">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>WhatsApp Group</span>
+                </a>
+                <a href="tel:+254702781490" style="display: flex; align-items: center; gap: 10px; padding: 12px; background: #25D366; color: white; border-radius: 10px; text-decoration: none;">
+                    <i class="fas fa-phone"></i>
+                    <span>+254 702 781 490</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <script>
+    function toggleChat() {
+        var chatWindow = document.getElementById('chat-window');
+        var chatToggle = document.getElementById('chat-toggle');
+        if (chatWindow.style.display === 'none') {
+            chatWindow.style.display = 'block';
+            chatToggle.style.transform = 'rotate(90deg)';
+        } else {
+            chatWindow.style.display = 'none';
+            chatToggle.style.transform = 'rotate(0deg)';
+        }
+    }
+    </script>
+    {% endif %}
+</body>
+</html>

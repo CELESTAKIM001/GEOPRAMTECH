@@ -1,0 +1,244 @@
+{% extends 'base.html' %}
+
+{% block title %}GEOPRAM TECH{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-shapes">
+        <div class="hero-shape hero-shape-1"></div>
+        <div class="hero-shape hero-shape-2"></div>
+        <div class="hero-shape hero-shape-3"></div>
+    </div>
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="hero-badge-dot"></span>
+                Training in OSM & HOT Mapping
+            </div>
+            <h1>Transforming Location Data into <span>Intelligent Solutions</span></h1>
+            <p class="hero-description">GEOPRAM TECH delivers cutting-edge GIS services, remote sensing, AI-powered spatial analysis, web development, social media management, poster & banner design, and professional training. Based in Meru, Nyeri & Nairobi - serving all of Kenya and beyond.</p>
+            <div class="hero-actions">
+                <a href="{% url 'services' %}" class="btn btn-primary">Explore Services</a>
+                <a href="{% url 'terms' %}" class="btn btn-secondary">Terms</a>
+            </div>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="hero-stat-number">10+</div>
+                    <div class="hero-stat-label">Projects Completed</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-number">20+</div>
+                    <div class="hero-stat-label">Clients</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-number">3+</div>
+                    <div class="hero-stat-label">Years Experience</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-number">60+</div>
+                    <div class="hero-stat-label">Students Trained</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Our Services</h2>
+            <p>Comprehensive GIS and spatial technology solutions tailored to your needs</p>
+        </div>
+        <div class="services-grid">
+            <div class="glass-card service-card">
+                <div class="service-icon"><i class="fas fa-map"></i></div>
+                <h4>GIS Mapping</h4>
+                <p>Professional cartography, spatial data creation, and interactive mapping solutions for all industries.</p>
+            </div>
+            <div class="glass-card service-card">
+                <div class="service-icon"><i class="fas fa-satellite"></i></div>
+                <h4>Remote Sensing</h4>
+                <p>Satellite imagery analysis, aerial photography interpretation, and environmental monitoring services.</p>
+            </div>
+            <div class="glass-card service-card">
+                <div class="service-icon"><i class="fas fa-robot"></i></div>
+                <h4>AI Analysis</h4>
+                <p>Machine learning-powered spatial analysis, land cover classification, and predictive modeling.</p>
+            </div>
+            <div class="glass-card service-card">
+                <div class="service-icon"><i class="fas fa-globe"></i></div>
+                <h4>Web Development</h4>
+                <p>Custom GIS web applications, spatial data portals, and interactive mapping dashboards.</p>
+            </div>
+            <div class="glass-card service-card">
+                <div class="service-icon"><i class="fas fa-palette"></i></div>
+                <h4>Design Services</h4>
+                <p>Professional posters, banners, map visualizations, and branded spatial graphics.</p>
+            </div>
+            <div class="glass-card service-card">
+                <div class="service-icon"><i class="fab fa-facebook"></i></div>
+                <h4>Social Media</h4>
+                <p>Complete social media management, content strategy, and engagement campaigns.</p>
+            </div>
+            <div class="glass-card service-card">
+                <div class="service-icon"><i class="fas fa-video"></i></div>
+                <h4>Video & Animation</h4>
+                <p>Promotional videos, animated explainers, and motion graphics for marketing.</p>
+            </div>
+            <div class="glass-card service-card">
+                <div class="service-icon"><i class="fas fa-chart-bar"></i></div>
+                <h4>Data Solutions</h4>
+                <p>Spatial data processing, database management, and GIS infrastructure setup.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section stats-section">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="glass-card stat-item">
+                <div class="stat-icon"><i class="fas fa-map-marker-alt"></i></div>
+                <div class="stat-number">10+</div>
+                <div class="stat-label">Mapping Projects</div>
+            </div>
+            <div class="glass-card stat-item">
+                <div class="stat-icon"><i class="fas fa-building"></i></div>
+                <div class="stat-number">20</div>
+                <div class="stat-label">Corporate Clients</div>
+            </div>
+            <div class="glass-card stat-item">
+                <div class="stat-icon"><i class="fas fa-graduation-cap"></i></div>
+                <div class="stat-number">60+</div>
+                <div class="stat-label">Students Trained</div>
+            </div>
+            <div class="glass-card stat-item">
+                <div class="stat-icon"><i class="fas fa-tools"></i></div>
+                <div class="stat-number">25+</div>
+                <div class="stat-label">Software Tools</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Software & Tools We Use</h2>
+            <p>Expertise in all major GIS, survey, and design software</p>
+        </div>
+        <div class="software-showcase">
+            <div class="glass-card software-item">
+                <div class="software-icon"><i class="fas fa-ruler-combined"></i></div>
+                <span>AutoCAD</span>
+            </div>
+            <div class="glass-card software-item">
+                <div class="software-icon"><i class="fas fa-map"></i></div>
+                <span>QGIS</span>
+            </div>
+            <div class="glass-card software-item">
+                <div class="software-icon"><i class="fas fa-globe"></i></div>
+                <span>ArcGIS</span>
+            </div>
+            <div class="glass-card software-item">
+                <div class="software-icon"><i class="fas fa-satellite-dish"></i></div>
+                <span>Kolida & Hi-Target</span>
+            </div>
+            <div class="glass-card software-item">
+                <div class="software-icon"><i class="fas fa-microscope"></i></div>
+                <span>ENVI</span>
+            </div>
+            <div class="glass-card software-item">
+                <div class="software-icon"><i class="fas fa-image"></i></div>
+                <span>ERDAS</span>
+            </div>
+            <div class="glass-card software-item">
+                <div class="software-icon"><i class="fas fa-chart-bar"></i></div>
+                <span>Python/GDAL</span>
+            </div>
+            <div class="glass-card software-item">
+                <div class="software-icon"><i class="fas fa-database"></i></div>
+                <span>PostGIS</span>
+            </div>
+            <div class="glass-card software-item">
+                <div class="software-icon"><i class="fas fa-palette"></i></div>
+                <span>Adobe Suite</span>
+            </div>
+            <div class="glass-card software-item">
+                <div class="software-icon"><i class="fas fa-ruler-combined"></i></div>
+                <span>Civil 3D</span>
+            </div>
+            <div class="glass-card software-item">
+                <div class="software-icon"><i class="fas fa-globe"></i></div>
+                <span>Web GIS</span>
+            </div>
+            <div class="glass-card software-item">
+                <div class="software-icon"><i class="fas fa-globe"></i></div>
+                <span>Google Earth Pro</span>
+            </div>
+            <div class="glass-card software-item">
+                <div class="icon"><i class="fas fa-mobile-alt"></i></div>
+                <span>QField</span>
+            </div>
+            <div class="glass-card software-item">
+                <div class="icon"><i class="fab fa-google"></i></div>
+                <span>Google Workspace</span>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 32px;">
+            <a href="{% url 'software' %}" class="btn btn-secondary">View All Software →</a>
+        </div>
+    </div>
+</section>
+
+<section class="section testimonials-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>What Our Clients Say</h2>
+            <p>Trusted by leading organizations across Africa</p>
+        </div>
+        <div class="testimonials-grid">
+            <div class="glass-card testimonial-card">
+                <p class="testimonial-quote">"GEOPRAM transformed our surveying operations with their RTK integration expertise. Outstanding technical support and professional service."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">JM</div>
+                    <div class="testimonial-info">
+                        <h5>James Muthomi</h5>
+                        <span>Survey Manager, GeoTech Kenya</span>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-card testimonial-card">
+                <p class="testimonial-quote">"Their AI-powered land classification saved us months of manual work. The team's expertise in remote sensing is second to none."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">SK</div>
+                    <div class="testimonial-info">
+                        <h5>Sarah Kilonzo</h5>
+                        <span>Environmental Director, GreenEarth</span>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-card testimonial-card">
+                <p class="testimonial-quote">"The Django training was exceptional. Our team now builds GIS web apps independently. Highly recommended!"</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">DO</div>
+                    <div class="testimonial-info">
+                        <h5>David Ochieng</h5>
+                        <span>CEO, DataMaps Solutions</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section cta-section">
+    <div class="container">
+        <div class="cta-content">
+            <h2>Ready to Transform Your Spatial Data?</h2>
+            <p>Contact us today for a free consultation on how we can help your business with GIS solutions.</p>
+            <a href="{% url 'terms' %}" class="btn btn-primary">View Terms →</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
